@@ -82,6 +82,31 @@ exports.updateTicket = async (req, res) => {
     }
 }
 
-exports.getAllTickets = async (req, res) => { }
+exports.getAllTickets = async (req, res) => {
+    const queryObj = {}
 
-exports.getOneTicket = async (req, res) => { }
+    if (req.query.status != undefined) {
+        queryObj.status = req.query.status
+    }
+
+    const savedUser = await User.findOne({ userId: req.body.userId })
+
+    if (savedUser.userType == constants.userTypes.admin) {
+        // do anything
+    } else if (savedUser.userType == constants.userTypes.customer) {
+        queryObj.reporter = savedUser.userId
+    } else {
+        queryObj.assignee = savedUser.userId
+    }
+
+    const tickets = await Ticket.find(queryObj)
+    res.status(200).send(objectConverter.ticketListResponse(tickets))
+}
+
+exports.getOneTicket = async (req, res) => {
+    const ticket = await Ticket.findOne({
+        _id: req.params.id
+    })
+
+    res.status(200).send(objectConverter.ticketResponse(ticket))
+}
