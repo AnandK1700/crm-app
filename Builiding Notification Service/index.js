@@ -9,6 +9,8 @@ mongoose.connect(dbConfig.DB_URL,
     () => { console.log("Connected to MongoDB") },
     err => { console.log("Error: ", err.message) })
 
+require("./routes/ticketNotification.route")(app)
+
 app.listen(3030, () => {
     console.log("Application started on the port number 3030")
 })
