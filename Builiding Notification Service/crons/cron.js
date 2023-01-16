@@ -3,7 +3,7 @@ const TicketNotificationModel = require("../models/ticketNotification.model")
 const EmailTransporter = require("../notifier/emailService")
 
 
-cron.schedule('*/5 * * * * *', async () => {
+cron.schedule('*/30 * * * * *', async () => {
     const notifications = await TicketNotificationModel.find({
         sentStatus: "UN_SENT"
     })
